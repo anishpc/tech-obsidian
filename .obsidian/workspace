@@ -1,0 +1,124 @@
+{
+  "main": {
+    "id": "54f8da409503b294",
+    "type": "split",
+    "children": [
+      {
+        "id": "86ab1e2000b00b31",
+        "type": "leaf",
+        "dimension": 79.61259079903147,
+        "active": true,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "spring-core/BeanPostProcessor.md",
+            "mode": "preview"
+          }
+        },
+        "group": "ce668c43ad2d1ae5"
+      },
+      {
+        "id": "e97af9aaa0b0ba03",
+        "type": "leaf",
+        "dimension": 20.387409200968527,
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "spring-core/BeanPostProcessor.md"
+          }
+        },
+        "group": "ce668c43ad2d1ae5"
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6b62381449248275",
+    "type": "split",
+    "children": [
+      {
+        "id": "8875280e8d694a47",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e5a0b9a6dd31d23f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "dac8e27596a3c274",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "managed",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 253
+  },
+  "right": {
+    "id": "369109d26681cae5",
+    "type": "split",
+    "children": [
+      {
+        "id": "9d0900f078714c53",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ed6e121d793aa740",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "spring-core/BeanPostProcessor.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "ea546d0764978782",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "spring-core/BeanPostProcessor.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "lastOpenFiles": [
+    "spring-core/BeanPostProcessor.md",
+    "spring-core/BeanFactoryPostProcessor.md",
+    "spring-core/Beans.md",
+    "spring-core/01 Spring Core Main.md",
+    "spring-core/IoC Container.md",
+    "01 Spring Main.md",
+    "spring-core/Managed Components.md",
+    "spring-core/Proxy Mechanism.md",
+    "Untitled.md",
+    "spring-core/Container Extension.md"
+  ]
+}
