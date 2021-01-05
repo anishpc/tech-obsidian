@@ -11,8 +11,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-core/Proxy Mechanism.md",
-            "mode": "preview"
+            "file": "spring-core/Java Config.md",
+            "mode": "source"
           }
         },
         "group": "ce668c43ad2d1ae5"
@@ -29,7 +29,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Proxy Mechanism.md"
+                "file": "spring-core/Java Config.md"
               }
             },
             "group": "ce668c43ad2d1ae5"
@@ -41,7 +41,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Proxy Mechanism.md",
+                "file": "spring-core/Java Config.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -108,7 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Proxy Mechanism.md",
+                "file": "spring-core/Java Config.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Proxy Mechanism.md"
+                "file": "spring-core/Java Config.md"
               }
             }
           }
@@ -135,8 +135,8 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "spring-core/Proxy Mechanism.md",
     "spring-core/Java Config.md",
+    "spring-core/Proxy Mechanism.md",
     "Java Config.md",
     "spring-core/01 Spring Core Main.md",
     "spring-core/Managed Components.md",
