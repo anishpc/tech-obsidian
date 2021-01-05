@@ -1,14 +1,14 @@
 Container
 ---------
 
-### Container > BeanFactory
+### BeanFactory
 
 -   Spring's job is to parse configuration files and then instantiate your managed classes, resolving their interdependencies.
 -   Spring is often called a **_container_**, since it is designed to create and manage all the dependencies within your application, serving as a foundation and a context through which beans may be resolved & injected
 -   This core engine is represented by a base interface called `BeanFactory`
 -   `BeanFactory` itself has sub-interfaces like `ApplicationContext` but also other bean factories like `ConfigurableBeanFactory`, `ConfigurableListableBeanFactory`
 
-### Container > ApplicationContext
+### ApplicationContext
 
 -   The `BeanFactory` interface provides a configuration mechanism capable of managing any type of object. The `ApplicationContext` is a sub-interface of `BeanFactory`. It adds :
     -   integration with AOP
@@ -20,7 +20,7 @@ Container
 -   The `ApplicationContext` extends the `BeanFactory` interface, providing more robust features. The separation can come in handy if you are building a very lightweight application and you don’t need some of these more advanced features
 -   Implementations of `ApplicationContext` manage a number of bean definitions uniquely identified by their name.
 
-### Container > ApplicationContext Types
+### ApplicationContext Types
 
 -   The container gets its instructions on what objects to instantiate, configure, and assemble by reading configuration metadata. The configuration metadata is represented in XML, Java annotations, or Java code
 -   Non-web applications
@@ -37,7 +37,7 @@ Container
 
 ![container-magic.png](container-magic.png)
 
-### Container > ApplicationContext config loading
+### ApplicationContext config loading
 
 -   An `ApplicationContext` is initialized with a configuration provided by a resource that can be an XML file (or more) or a configuration class (or more) or both.
 -   When the resource is provided as a `String` value, the Spring container tries to load the resource based on the prefix of the string value
@@ -57,11 +57,11 @@ Container
         -   location : in the web location following the prefix
         -   notes : resource type `UrlResource`; `WebApplicationContext` is suitable
 
-### Container > WebApplicationContext bootstrap
+### WebApplicationContext bootstrap
 
 -   Prior to Servlet 3.0, it was necessary to configure your web application's `web.xml` file to bootstrap `WebApplicationContext`. Since Servlet 3.0 (& Spring 3.1), it is possible to bootstrap a `WebApplicationContext` programmatically using `WebApplicationInitializer`
 
-### Container > Injection
+## Injection
 
 -   Spring supports types of dependency injection
     1.  constructor injection
@@ -72,7 +72,7 @@ Container
 -   If the Spring IoC container cannot find a bean to inject into when creating a bean declared to use constructor injection, an exception of type `org.springframework.beans.factory.UnsatisfiedDependencyException` will be thrown and the application will fail to start.
 -   The `@Autowired`, `@Inject`, `@Value`, and `@Resource` annotations are handled by Spring `BeanPostProcessor` implementations. This means that you cannot apply these annotations within your own `BeanPostProcessor` or `BeanFactoryPostProcessor` types (if any). These types must be 'wired up' explicitly by using XML or a Spring `@Bean` method.
 
-### Container > Injection > Fine-tuning autowiring
+### Injection > Fine-tuning autowiring
 
 1.  `@Primary`
     
@@ -155,12 +155,12 @@ Container
 ### Injection Annotations
 Type|@Resource|@Inject|@Autowired
 -----|------------|--------|-----------
-Source|part of JSR-250 packaged with Jakarta EE|@Inject is from JSR-330 from javax.inject.| part of Spring framework
+Source|part of JSR-250 packaged with Jakarta EE|`@Inject` is from JSR-330 from `javax.inject.`| part of Spring framework
 Usage places| Can use `@Resource` on : - field  setters; not on constructors|`@Inject` can be used on field, setter, constructor|`@Autowired` can be used on field, setter, constructor, method parameters
-Paramters| The @Resource annotation takes 2 important optional parameter name and type. \* If no name is explicitly specified, the default name is derived from the field name or setter method. \* Similarly, if no type is specified explicitly, it will do a type match and try to resolve it.|Does not take any parameters|Takes one parameter required (default value is true)
+Parameters| The `@Resource` annotation takes 2 important optional parameter name and type. \* If no name is explicitly specified, the default name is derived from the field name or setter method. \* Similarly, if no type is specified explicitly, it will do a type match and try to resolve it.|Does not take any parameters|Takes one parameter required (default value is true)
 Precedence| 1. By Name 2. By Type 3. By Qualifier| 1. By Type 2. By Qualifier(`@Qualifier`) 3.By Name(`@Named`)| 1. By Name, 2. By Qualifier, 3. By Name
 
-### Container > Injection > `@Resource` (JSR-250)
+### Injection > `@Resource` (JSR-250)
 
 ```java
 //classses : FileReader(abstract) <-- PdfFileReader
@@ -195,7 +195,7 @@ public class ResourceTest {
 }
 ```
 
-### Container > Injection > `@Inject` (JSR-330)
+### Injection > `@Inject` (JSR-330)
 
 ```java
 public class ResourceTest {
@@ -215,7 +215,7 @@ public class ResourceTest {
 }
 ```
 
-### Container > Injection > `@Autowired` (Spring)
+### Injection > `@Autowired` (Spring)
 
 ```java
 public class ResourceTest {
@@ -278,13 +278,13 @@ public class ResourceTest {
 -   Standard objects :
     -   You can also use `@Autowired` for interfaces that are well-known resolvable dependencies: `BeanFactory,` `ApplicationContext`, `Environment`, `ResourceLoader`, `ApplicationEventPublisher`, and `MessageSource`. These interfaces and their extended interfaces, such as `ConfigurableApplicationContext` or `ResourcePatternResolver`, are automatically resolved, with no special setup necessary.
 
-### Container > Injection > Other Annotations
+### Injection > Other Annotations
 
 -   `@Required`
     -   Can be applied only on setter methods & it marks that dependency as mandatory
     -   Since Spring 5.1, this has been deprecated in favour of using constructor injection for required settings
 
-### Container > Misc
+## Misc
 
 -   `@Description` annotation adds a description to a bean, which is quite useful when beans are exposed for monitoring puposes. It can be used with `@Bean` and `@Component` (and its specializations)
 

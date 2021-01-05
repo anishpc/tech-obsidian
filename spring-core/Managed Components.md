@@ -1,4 +1,4 @@
-### Managed Components
+## Managed Components
 
 -   Beans can be defined using
     -   `@Configuration`
@@ -7,7 +7,7 @@
     -   `@DependsOn`
     -   Component scanning
 
-### Managed Components > Component Scanning
+### Component Scanning
 
 -   `@Component` is a generic stereotype for any Spring-managed component
 -   `@Repository`, `@Service`, `@Controller` are specialisations of `@Component` for specific use-cases — in persistence, service & presentation layers respectively. These are defined in the `org.springframework.stereotype` package.
@@ -28,7 +28,7 @@ public @interface Service {
 -   `@Repository` is already supported as a annotation-pointcut for automatic exception translation in the persistence layer. It uses the `PersistenceExceptionTranslationPostProcessor`. The postprocessor automatically looks for all exception translators (implementations of the `PersistenceExceptionTranslator` interface) and advises all beans marked with the `@Repository` annotations so that the discovered translators can intercept and apply the appropriate translations on the thrown exceptions
 -   More : [](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/data-access.html#orm-exception-translation)[https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/data-access.html#orm-exception-translation](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/data-access.html#orm-exception-translation)
 
-### Managed Components > Meta-annotations & Composed Annotations
+### Meta-annotations & Composed Annotations
 
 -   **_Meta-annotations_**
     
@@ -84,7 +84,7 @@ public @interface Service {
 -   More details : [](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model)[https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model)
     
 
-### Managed Components > Component Scanning
+### Component Scanning
 
 -   Add `@ComponentScan` to the `@Configuration` class to scan; `basePackages` attribute is parent package for the classes. Alternatively, specifiy comma or semicolon or space separated list of parent packages
 
@@ -100,7 +100,7 @@ public class AppConfig  {
     -   On JDK 9’s module path (Jigsaw), Spring’s classpath scanning generally works as expected. However, make sure that your component classes are exported in your module-info descriptors. If you expect Spring to invoke non-public members of your classes, make sure that they are 'opened' (that is, that they use an opens declaration instead of an exports declaration in your module-info descriptor).
 -   Furthermore, the `AutowiredAnnotationBeanPostProcessor` and `CommonAnnotationBeanPostProcessor` are both implicitly included when you use the component-scan element. That means that the two components are autodetected and wired together — all without any bean configuration metadata provided in XML.
 
-### Managed Components > Component Scanning Filters
+### Component Scanning Filters
 
 -   By default, classes annotated with `@Component`, `@Repository`, `@Service`, `@Controller`, `@Configuration`, or a custom annotation that itself is annotated with `@Component` are the only detected candidate components. However, you can modify and extend this behavior by applying custom filters.
 -   Add them as `includeFilters` or `excludeFilters` attributes of the `@ComponentScan` annotation (or as `<context:include-filter />` or `<context:exclude-filter />` child elements of the `context:component-scan` element in XML configuration). Each filter element requires the `type` and `expression` attributes.
@@ -123,7 +123,7 @@ aspectj|`org.example.*Service+`|An AspectJ type expression to be matched by the 
 regex|`org\.example\.Default.*`|A regex expression to be matched by the target components' class names.
 custom|`org.example.MyTypeFilter`|A custom implementation of the `org.springframework.core.type.TypeFilter` interface.
 
-### Managed Components > Bean metadata within Components
+### Bean metadata within Components
 
 -   Can do this with the same `@Bean` annotation used to define bean metadata within `@Configuration` annotated classes.
 
@@ -146,7 +146,7 @@ public class FactoryMethodComponent {
 -   Difference with components in `@Bean` & `@Configuration` : the component classes are not enhanced with CGLIB to intercept the invocation of methods and fields. The components have standard Java semantics, with no special CGLIB processing or other constraints
 -   CGLIB proxying is the means by which invoking methods or fields within `@Bean` methods in `@Configuration` classes creates bean metadata references to collaborating objects. Such methods are not invoked with normal Java semantics but rather go through the container in order to provide the usual lifecycle management and proxying of Spring beans, even when referring to other beans through programmatic calls to `@Bean` methods. In contrast, invoking a method or field in a `@Bean` method within a plain `@Component` class has standard Java semantics, with no special CGLIB processing or other constraints applying.
 
-### Managed Components > Static `@Bean` definitions
+### Static `@Bean` definitions
 
 -   `BeanFactoryPostProcessor` & `BeanPostProcessor` may be declared as `static` in the `@Configuration` classes, since such beans get initialized early in the container lifecycle and should avoid triggering other parts of the configuration at that point
 -   CGLIB subclassing can override only non-static methods — hence, a direct call to another `@Bean` method has standard Java semantics, resulting in an independent instance being returned straight from the factory method itself.
@@ -156,7 +156,36 @@ public class FactoryMethodComponent {
     -   Java 8 default methods in interfaces implemented by component or configuration class
 -   Collision : Single class may hold multiple `@Bean` methods for the same bean. The variant with the largest number of satisfiable dependencies is picked at construction time
 
-### Managed Components > Component Index
+### Component Index
 
 -   While classpath scanning is very fast, it is possible to improve the startup performance of large applications by creating a static list of candidates at compilation time. In this mode, all modules that are target of component scan must use this mechanism.
 -   [](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-scanning-index)[https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-scanning-index](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-scanning-index)
+
+### Component annotation equivalent
+- Instead of `@Component`, can use `javax.inject.@Named` OR `javax.annotation.ManagedBean`
+```java
+@Named("movieListener")  // @ManagedBean("movieListener") could be used as well
+public class SimpleMovieLister {
+
+    private MovieFinder movieFinder;
+
+    @Inject
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+    // ...
+}
+```
+- Component scanning works with `@Named` & `@ManagedBean` as well
+
+### Limitations of JSR-330 annotations
+Spring annotation|JSR-330 annotation|Comments
+----|---|---
+`@Autowired`|`@Inject`|`@Inject` has no `required` attribute. Can use `Optional` instead
+`@Component`|`@Named`,`@ManagedBean`|JSR-330 does not provide composable model, only a way to identify named components
+`@Scope("singleton")`|`@Singleton`|JSR-330 default scope is "prototype". To keep consistency with Spring, JSR-330 bean is declared as singleton in Spring container by default. To change, use the Spring's `@Scope` annotation. The `@Scope` annotation provided by JSR-330 is only for creating custom annotations
+`@Qualifier`|`@Qualifier`, `@Named`|`javax.inject.Qualifier` is a meta annotation for building custom qualifiers. Concrete qualifiers can be associated through `@Named`
+`@Value`|-|no equivalent
+`@Required`|-|no equivalent
+`@Lazy`|-|no equivalent
+ObjectFactory|Provider|`javax.inject.Provider` is a direct alternative to Spring’s `ObjectFactory`, only with a shorter `get()` method name. It can also be used in combination with Spring’s `@Autowired` or with non-annotated constructors and setter methods.

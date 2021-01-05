@@ -11,23 +11,48 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-core/BeanPostProcessor.md",
+            "file": "spring-core/Proxy Mechanism.md",
             "mode": "preview"
           }
         },
         "group": "ce668c43ad2d1ae5"
       },
       {
-        "id": "e97af9aaa0b0ba03",
-        "type": "leaf",
+        "id": "76df457f2c2dc04a",
+        "type": "split",
         "dimension": 20.387409200968527,
-        "state": {
-          "type": "outline",
-          "state": {
-            "file": "spring-core/BeanPostProcessor.md"
+        "children": [
+          {
+            "id": "d55c6464696dae75",
+            "type": "leaf",
+            "dimension": 64.68646864686468,
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "spring-core/Proxy Mechanism.md"
+              }
+            },
+            "group": "ce668c43ad2d1ae5"
+          },
+          {
+            "id": "3dce4fef5b4e8346",
+            "type": "leaf",
+            "dimension": 35.31353135313531,
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "spring-core/Proxy Mechanism.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            },
+            "group": "ce668c43ad2d1ae5"
           }
-        },
-        "group": "ce668c43ad2d1ae5"
+        ],
+        "direction": "horizontal"
       }
     ],
     "direction": "vertical"
@@ -54,7 +79,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "managed",
+                "query": "Named",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -83,7 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/BeanPostProcessor.md",
+                "file": "spring-core/Proxy Mechanism.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/BeanPostProcessor.md"
+                "file": "spring-core/Proxy Mechanism.md"
               }
             }
           }
@@ -110,15 +135,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
+    "spring-core/Proxy Mechanism.md",
+    "spring-core/Java Config.md",
+    "Java Config.md",
+    "spring-core/01 Spring Core Main.md",
+    "spring-core/Managed Components.md",
+    "spring-core/IoC Container.md",
+    "spring-core/Beans.md",
     "spring-core/BeanPostProcessor.md",
     "spring-core/BeanFactoryPostProcessor.md",
-    "spring-core/Beans.md",
-    "spring-core/01 Spring Core Main.md",
-    "spring-core/IoC Container.md",
-    "01 Spring Main.md",
-    "spring-core/Managed Components.md",
-    "spring-core/Proxy Mechanism.md",
-    "Untitled.md",
-    "spring-core/Container Extension.md"
+    "01 Spring Main.md"
   ]
 }
