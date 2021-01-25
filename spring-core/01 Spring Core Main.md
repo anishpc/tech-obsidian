@@ -7,5 +7,7 @@
 - ### Managed Components [[Managed Components]]
 - ### Proxy Mechanism [[Proxy Mechanism]]
 - ### Java based container configuration [[Java Config]]
+- ### Environment Abstraction [[Environment Abstraction]]
+- ### SpEL [[SpEL]]
 
 

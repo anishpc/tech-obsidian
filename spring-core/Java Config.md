@@ -1,10 +1,14 @@
 # Java container configuration
 
 ## Basic : `@Configuration` with `@Bean`
-- The `@Bean` annotation is used to indicate that a method instantiates, configures, and initializes a new object to be managed by the Spring IoC container. 
-- `@Bean` is much similar to `<bean>` config in XML
+- Bean method : The `@Bean` annotation is used to indicate that a method instantiates, configures, and initializes a new object to be managed by the Spring IoC container. 
+- XML : `@Bean` is much similar to `<bean>` config in XML
+- NOT final : Classes annotated with `@Configuration` use CGLIB to create a proxy for `@Configuration` class. CGLIB creates subclass for each class that is supposed to be proxied (hence cannot be `final`). Similarly, methods cannot be final.
+- IF final : If methods or class is final then `BeanDefinitionParsingException` is thrown
+- Identify class : class name would have  `$$EnhancerBySpringCGLIB`
+> NOTE :  As a consequence, `@Configuration` classes and their factory methods ***both*** must not be marked as `final` or `private` in this mode
 
-## Full `@Configuration` vs "lite" `@Bean` mode
+## Full `@Configuration` vs "lite" `@Bean` mode)
 - When `@Bean` ***methods*** are declared within classes that are not annotated with `@Configuration`, they are referred to as being processed in a "lite" mode. Bean methods declared in a `@Component` or even in a plain old class are considered to be "lite"
 - Example : service components may expose management views to the container through an additional `@Bean` method on each applicable component class.
 - More here : https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-stereotype-annotations

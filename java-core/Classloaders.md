@@ -1,0 +1,4 @@
+- [Java ClassLoader | This Technology Life](https://www.thistechnologylife.com/java-classloader/)
+- [Difference Between JVM, JRE, and JDK | Baeldung](https://www.baeldung.com/jvm-vs-jre-vs-jdk)
+- [Do You Really Get Class Loaders? - YouTube](https://www.youtube.com/watch?v=t8sQw3pGJzM)
+- [What are the changes of class loaders in Java 9? (tutorialspoint.com)](https://www.tutorialspoint.com/what-are-the-changes-of-class-loaders-in-java-9)

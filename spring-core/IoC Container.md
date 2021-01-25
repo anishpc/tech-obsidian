@@ -72,11 +72,9 @@ Container
 -   If the Spring IoC container cannot find a bean to inject into when creating a bean declared to use constructor injection, an exception of type `org.springframework.beans.factory.UnsatisfiedDependencyException` will be thrown and the application will fail to start.
 -   The `@Autowired`, `@Inject`, `@Value`, and `@Resource` annotations are handled by Spring `BeanPostProcessor` implementations. This means that you cannot apply these annotations within your own `BeanPostProcessor` or `BeanFactoryPostProcessor` types (if any). These types must be 'wired up' explicitly by using XML or a Spring `@Bean` method.
 
-### Injection > Fine-tuning autowiring
-
-1.  `@Primary`
-    
-    -   `@Primary` indicates that a particular bean should be given preference when multiple beans are candidates to be autowired to a single-valued dependency. If exactly one primary bean exists among the candidates, it becomes the autowired value.
+### Fine-tuning autowiring
+1. `@Primary`
+	- `@Primary` indicates that a particular bean should be given preference when multiple beans are candidates to be autowired to a single-valued dependency. If exactly one primary bean exists among the candidates, it becomes the autowired value.
         
         ```java
         @Configuration
@@ -101,7 +99,7 @@ Container
         ```
         
         -   Self-reference : [](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers)[https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers)
-2.  `@Qualifier`
+2. `@Qualifier`
     
     -   `@Primary` is an effective way to use autowiring by type with several instances when one primary candidate can be determined. When you need more control over the selection process, you can use Spring’s `@Qualifier` annotation
     -   Creating custom qualifier
@@ -150,7 +148,20 @@ Container
     @Autowired
     private Store<Integer> s2; // <Integer> qualifier, injects the integerStore bean
     ```
-    
+    4. Marking as not being used in autowiring
+ ```java
+@Configuration
+public class AppConfig {
+	// bean marked as not available for autowiring
+	@Bean(autowireCandidate = false)
+	public DataSource dataSource1(){
+	}
+	
+	@Bean   //this bean would be selected for autowiring
+	public DataSource dataSource2(){
+	}
+}		
+```
 
 ### Injection Annotations
 Type|@Resource|@Inject|@Autowired

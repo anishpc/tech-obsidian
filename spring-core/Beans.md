@@ -12,26 +12,23 @@ Bean Definition
 -   Runtime registration :
     -   Bean metadata and manually supplied singleton instances need to be registered as early as possible, in order for the container to properly reason about them during autowiring and other introspection steps. While overriding existing metadata and existing singleton instances is supported to some degree, the registration of new beans at runtime (concurrently with live access to the factory) is not officially supported and may lead to concurrent access exceptions, inconsistent state in the bean container, or both.
 
-Instantiating Beans
----------------------------
-
 Bean Naming
 -------------------
 
--   Spring bean naming :
+#### Spring bean naming 
     
-    -   class name with first letter lower-cased
-    -   bean method name when annotated with `@Bean`
-    -   specify name with `@Component("myNewName")`
--   Spring bean name aliases :
-    
-    -   Declaring aliases using stereotype annotations is not supported at the moment, but it is possible using the `@Bean` annotation
-    -   The caveat of declaring aliases using the `@Bean` annotation is that the method name will **no** longer be used as a bean name, only the names declared as values for the `name` attribute in the annotation will be used.
+- class name with first letter lower-cased
+- bean method name when annotated with `@Bean`
+- specify name with `@Component("myNewName")`
+
+#### Spring bean name aliases 
+- Declaring aliases using stereotype annotations is not supported at the moment, but it is possible using the `@Bean` annotation
+- The caveat of declaring aliases using the `@Bean` annotation is that the method name will **no** longer be used as a bean name, only the names declared as values for the `name` attribute in the annotation will be used.
     
     ```java
     @Configuration
     public class AliasesCfg {
-        @Bean(name= {"beanOne", "beanTwo"})
+        @Bean(name= {"beanOne", "beanTwo"}) // primary bean name plus aliases
         SimpleBean simpleBean(){
             return new SimpleBeanImpl();
         }
@@ -39,14 +36,12 @@ Bean Naming
     // there is no bean with name `simpleBean`
     ```
     
--   Rule of thumb :
-    
-    -   Consider specifying the name with the annotation whenever other components may be making explicit references to it.
-    -   Auto-generated names are adequate whenever the container is responsible for wiring.
--   Custom name :
-    
-    -   Create custom class which implements `BeanNameGenerator` and include a no-arg constructor
-    -   Configure the custom as follows:
+#### Rule of thumb
+- Consider specifying the name with the annotation whenever other components may be making explicit references to it.
+- Auto-generated names are adequate whenever the container is responsible for wiring.
+#### Custom name
+- Create custom class which implements `BeanNameGenerator` and include a no-arg constructor
+- Configure the custom as follows
     
     ```java
     @Configuration
@@ -62,9 +57,8 @@ Bean Naming
     </beans>
     ```
     
--   Conflicts :
-    
-    -   Conflicts due to multiple auto-detected components having the same non-qualified class name (i.e. classes with identical names but residing in different packages) then as of Spring 5.2.3, can configure `FullyQualifiedAnnotationBeanNameGenerator` provided by Spring
+#### Conflicts
+- Conflicts due to multiple auto-detected components having the same non-qualified class name (i.e. classes with identical names but residing in different packages) then as of Spring 5.2.3, can configure `FullyQualifiedAnnotationBeanNameGenerator` provided by Spring
 
 Bean Scopes
 -------------------
@@ -125,7 +119,7 @@ public class UpdateNotifier {
 
 ```
 
-### Bean Scopes > Scoped bean dependencies
+### Scoped bean dependencies
 
 -   **_AOP Proxy_** : If you want to inject a short-lived scope into another bean of a longer-lived scope, you may choose to inject an AOP proxy in place of the scoped bean. This proxy needs to expose the same interface as the scoped object but can also retrieve the real target object from relevant scope & delegate calls to the real object
     -   Singleton example : Using `<aop:scoped-proxy/>` on `singleton` scope -> the reference then goes through an intermediate proxy that is serializable and therefore able to re-obtain the target singleton bean on deserialization
@@ -165,7 +159,7 @@ Customize Bean
 ![bean-lifecycle-phases.png](bean-lifecycle-phases.png)
 
 -   To interact with the bean's lifecycle, there are options:
-    1.  JSR-250 `@PostConstruct` & `@PreDestroy` anntations (RECOMMENDED way)
+    1.  JSR-250 `@PostConstruct` & `@PreDestroy` annotations (RECOMMENDED way)
     2.  Lifecycle callbacks in `<bean/>` or `@Bean` declarations
     3.  `InitializingBean` & `DisposableBean` interfaces
     4.  Using default initialization & destroy methods

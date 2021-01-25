@@ -4,44 +4,42 @@
     "type": "split",
     "children": [
       {
-        "id": "86ab1e2000b00b31",
+        "id": "a388678697a15354",
         "type": "leaf",
-        "dimension": 79.61259079903147,
+        "dimension": 75.54304102976668,
         "active": true,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-core/Java Config.md",
-            "mode": "source"
+            "file": "spring-core/Environment Abstraction.md",
+            "mode": "preview"
           }
         },
-        "group": "ce668c43ad2d1ae5"
+        "group": "9d8168a3780a4ba7"
       },
       {
-        "id": "76df457f2c2dc04a",
+        "id": "04ec5ea4be318f31",
         "type": "split",
-        "dimension": 20.387409200968527,
+        "dimension": 24.456958970233305,
         "children": [
           {
-            "id": "d55c6464696dae75",
+            "id": "35c7e7dbeb0806fe",
             "type": "leaf",
-            "dimension": 64.68646864686468,
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Java Config.md"
+                "file": "spring-core/Environment Abstraction.md"
               }
             },
-            "group": "ce668c43ad2d1ae5"
+            "group": "9d8168a3780a4ba7"
           },
           {
-            "id": "3dce4fef5b4e8346",
+            "id": "c387da1cc65e0c63",
             "type": "leaf",
-            "dimension": 35.31353135313531,
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Java Config.md",
+                "file": "spring-core/Environment Abstraction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -49,7 +47,7 @@
                 "unlinkedCollapsed": true
               }
             },
-            "group": "ce668c43ad2d1ae5"
+            "group": "9d8168a3780a4ba7"
           }
         ],
         "direction": "horizontal"
@@ -79,7 +77,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "Named",
+                "query": "@Va",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -108,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Java Config.md",
+                "file": "spring-core/Environment Abstraction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Java Config.md"
+                "file": "spring-core/Environment Abstraction.md"
               }
             }
           }
@@ -135,15 +133,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "spring-core/Java Config.md",
-    "spring-core/Proxy Mechanism.md",
-    "Java Config.md",
+    "spring-core/Environment Abstraction.md",
+    "spring-core/SpEL.md",
     "spring-core/01 Spring Core Main.md",
-    "spring-core/Managed Components.md",
+    "SpEL.md",
     "spring-core/IoC Container.md",
+    "spring-core/Managed Components.md",
+    "spring-core/Java Config.md",
     "spring-core/Beans.md",
-    "spring-core/BeanPostProcessor.md",
-    "spring-core/BeanFactoryPostProcessor.md",
-    "01 Spring Main.md"
+    "Untitled.md",
+    "spring-core/Property Source Abstraction.md"
   ]
 }
