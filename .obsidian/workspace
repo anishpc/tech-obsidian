@@ -4,50 +4,50 @@
     "type": "split",
     "children": [
       {
-        "id": "a388678697a15354",
+        "id": "44166f54a6e52c1f",
         "type": "leaf",
-        "dimension": 75.54304102976668,
+        "dimension": 73.77312952534191,
         "active": true,
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-core/Environment Abstraction.md",
+            "file": "spring-data-access/DataSource.md",
             "mode": "preview"
           }
         },
-        "group": "9d8168a3780a4ba7"
+        "group": "734c76aa95e79560"
       },
       {
-        "id": "04ec5ea4be318f31",
+        "id": "155755fc808dac83",
         "type": "split",
-        "dimension": 24.456958970233305,
+        "dimension": 26.22687047465809,
         "children": [
           {
-            "id": "35c7e7dbeb0806fe",
+            "id": "7d9d524e218dea04",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Environment Abstraction.md"
+                "file": "spring-data-access/DataSource.md"
               }
             },
-            "group": "9d8168a3780a4ba7"
+            "group": "734c76aa95e79560"
           },
           {
-            "id": "c387da1cc65e0c63",
+            "id": "8939baf589e63bd2",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Environment Abstraction.md",
+                "file": "spring-data-access/DataSource.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               }
             },
-            "group": "9d8168a3780a4ba7"
+            "group": "734c76aa95e79560"
           }
         ],
         "direction": "horizontal"
@@ -77,7 +77,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "@Va",
+                "query": "proxy-Targ",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-core/Environment Abstraction.md",
+                "file": "spring-data-access/DataSource.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-core/Environment Abstraction.md"
+                "file": "spring-data-access/DataSource.md"
               }
             }
           }
@@ -133,15 +133,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "spring-core/Environment Abstraction.md",
-    "spring-core/SpEL.md",
-    "spring-core/01 Spring Core Main.md",
-    "SpEL.md",
-    "spring-core/IoC Container.md",
-    "spring-core/Managed Components.md",
-    "spring-core/Java Config.md",
-    "spring-core/Beans.md",
-    "Untitled.md",
-    "spring-core/Property Source Abstraction.md"
+    "spring-data-access/DataSource.md",
+    "spring-data-access/01 Spring Data Access Main.md",
+    "Database connection config.md",
+    "Data Access JDBC.md",
+    "spring-data-access/DAO Config.md",
+    "DAO Config.md",
+    "spring-data-access/Transaction Management.md",
+    "spring-data-access/Transaction Propagation.md",
+    "spring-data-access/Transaction Model.md",
+    "Transaction Propagation.md"
   ]
 }

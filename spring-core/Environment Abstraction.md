@@ -154,6 +154,9 @@ public class DefaultDataConfig {
 	4. JVM system properties (`-D` command-line arguments)
 	5. JVM system environment (operating system environment variables)
 
+### Spring Boot property sources
+- [24. Externalized Configuration (spring.io)](https://docs.spring.io/spring-boot/docs/1.5.22.RELEASE/reference/html/boot-features-external-config.html)
+
 ### Adding your own property source
 
 #### Adding property source programmatically

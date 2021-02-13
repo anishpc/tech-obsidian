@@ -63,3 +63,16 @@ public class MovieRecommender {
 	}
 }
 ```
+
+### References in SpEL
+Expression format : `@Value("#{ <expr> }")`. The `<expr>` value is as below
+- Static fields from class - `T(com.example.Person).DEFAULT_NAME`
+- Static methods from class - `T(com.example.Person).getDefaultName()`
+- Spring Bean property - `@person.name`
+- Spring Bean method - `@person.getName()`
+- SpEL variables - `#personName`
+- Object property on reference assigned to SpEL variables - `#person.name`
+- Object method on reference assigned to SpEL variables - `#person.getName()`
+- Spring application env. properties - `environment['app.file.property']`
+- System properties - `systemProperties['app.vm.property']`
+- System environment properties - `systemEnvironment['JAVA_HOME']`
