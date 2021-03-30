@@ -11,8 +11,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-data-access/DataSource.md",
-            "mode": "preview"
+            "file": "distributed-systems/Distributed Systems Reading.md",
+            "mode": "source"
           }
         },
         "group": "734c76aa95e79560"
@@ -28,7 +28,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-data-access/DataSource.md"
+                "file": "distributed-systems/Distributed Systems Reading.md"
               }
             },
             "group": "734c76aa95e79560"
@@ -39,7 +39,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-data-access/DataSource.md",
+                "file": "distributed-systems/Distributed Systems Reading.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-data-access/DataSource.md",
+                "file": "distributed-systems/Distributed Systems Reading.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-data-access/DataSource.md"
+                "file": "distributed-systems/Distributed Systems Reading.md"
               }
             }
           }
@@ -133,15 +133,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "spring-data-access/DataSource.md",
+    "distributed-systems/Distributed Systems Reading.md",
+    "spring-boot/Spring Boot Conditionals.md",
+    "spring-boot/01 Spring Boot Main.md",
+    "spring-core/01 Spring Core Main.md",
+    "Spring Boot Conditionals.md",
+    "spring-boot/Untitled.md",
     "spring-data-access/01 Spring Data Access Main.md",
+    "spring-data-access/DataSource.md",
     "Database connection config.md",
-    "Data Access JDBC.md",
-    "spring-data-access/DAO Config.md",
-    "DAO Config.md",
-    "spring-data-access/Transaction Management.md",
-    "spring-data-access/Transaction Propagation.md",
-    "spring-data-access/Transaction Model.md",
-    "Transaction Propagation.md"
+    "Data Access JDBC.md"
   ]
 }
