@@ -11,7 +11,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "distributed-systems/Distributed Systems Reading.md",
+            "file": "Temp.md",
             "mode": "source"
           }
         },
@@ -28,7 +28,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "distributed-systems/Distributed Systems Reading.md"
+                "file": "Temp.md"
               }
             },
             "group": "734c76aa95e79560"
@@ -39,7 +39,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "distributed-systems/Distributed Systems Reading.md",
+                "file": "Temp.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "distributed-systems/Distributed Systems Reading.md",
+                "file": "Temp.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "distributed-systems/Distributed Systems Reading.md"
+                "file": "Temp.md"
               }
             }
           }
@@ -133,15 +133,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "distributed-systems/Distributed Systems Reading.md",
-    "spring-boot/Spring Boot Conditionals.md",
+    "Untitled.md",
+    "Spring Boot AutoConfiguration.md",
     "spring-boot/01 Spring Boot Main.md",
+    "Spring Boot Maven.md",
+    "spring-boot/Spring Boot Actuator.md",
+    "spring-boot/Spring Boot Conditionals.md",
+    "Spring Boot Actuator.md",
+    "distributed-systems/Distributed Systems Reading.md",
     "spring-core/01 Spring Core Main.md",
-    "Spring Boot Conditionals.md",
-    "spring-boot/Untitled.md",
-    "spring-data-access/01 Spring Data Access Main.md",
-    "spring-data-access/DataSource.md",
-    "Database connection config.md",
-    "Data Access JDBC.md"
+    "Spring Boot Conditionals.md"
   ]
 }
