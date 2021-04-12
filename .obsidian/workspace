@@ -11,7 +11,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "java/java-concurrency/Producer Consumer.md",
+            "file": "spring-boot/Spring Externalized Configuration.md",
             "mode": "source"
           }
         },
@@ -28,7 +28,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "java/java-concurrency/Producer Consumer.md"
+                "file": "spring-boot/Spring Externalized Configuration.md"
               }
             },
             "group": "734c76aa95e79560"
@@ -39,7 +39,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "java/java-concurrency/Producer Consumer.md",
+                "file": "spring-boot/Spring Externalized Configuration.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -77,7 +77,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "bean-",
+                "query": "bean-life",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "java/java-concurrency/Producer Consumer.md",
+                "file": "spring-boot/Spring Externalized Configuration.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "java/java-concurrency/Producer Consumer.md"
+                "file": "spring-boot/Spring Externalized Configuration.md"
               }
             }
           }
@@ -133,15 +133,15 @@
     "collapsed": true
   },
   "lastOpenFiles": [
-    "java/java-concurrency/Producer Consumer.md",
+    "spring-boot/Spring Externalized Configuration.md",
+    "spring-boot/01 Spring Boot Main.md",
+    "Spring Property Configuration.md",
     "java/java-concurrency/Thread Pools & Executors.md",
-    "Producer Consumer.md",
+    "java/java-concurrency/Producer Consumer.md",
     "java/java-concurrency/01_Java Concurrency Main.md",
     "java/java-concurrency/Thread life cycle states.md",
-    "Thread Pools & Executors.md",
-    "Locking.md",
-    "Writing Thread-safe classes.md",
-    "spring-core/Beans.md",
-    "spring-core/BeanFactoryPostProcessor.md"
+    "Thread life cycle states.md",
+    "Untitled.md",
+    "spring-boot/boot-auto-configuration/Spring Boot Custom Conditions.md"
   ]
 }

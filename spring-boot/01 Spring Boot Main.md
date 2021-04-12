@@ -4,3 +4,4 @@ Reference : [Spring Boot Reference Documentation](https://docs.spring.io/spring-
 - ### [[Spring Boot Maven]]
 - ###  [[Spring Boot Conditionals]]
 - ### [[Spring Boot Actuator]]
+- ### [[Spring Externalized Configuration]]

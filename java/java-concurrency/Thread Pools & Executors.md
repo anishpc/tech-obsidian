@@ -143,3 +143,20 @@ List<Runnable> shutdownNow()
 	- tasks not yet started are returned to the caller but
 	- tasks in progress are allowed to complete
 	- Java Concurrency In Practice has an example of an `ExecutorService` which keeps cancelled tasks in a list so that those can be processed again.
+
+## Work stealing Thread Pool
+```java
+public static ExecutorService newWorkStealingPool() {  
+  
+  return new ForkJoinPool(Runtime.getRuntime().availableProcessors(),  
+    ForkJoinPool.defaultForkJoinWorkerThreadFactory,  
+      null, true);  
+}
+```
+
+## Pool based on tasks
+### Large number of small tasks
+![pools_small_tasks.png](pools_small_tasks.png)
+
+### Small number of time consuming tasks
+![pools_timeconsuming_tasks.png](pools_timeconsuming_tasks.png)
