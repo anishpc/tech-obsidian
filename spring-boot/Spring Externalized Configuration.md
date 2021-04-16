@@ -1,4 +1,10 @@
 
+## ConfigurationProperties
+- A way to map properties to POJO
+- IDE support so properties have recommendation & documentation
+- Type-safe (coerced by Spring converters)
+- Can be validated (`@Valid`) (JSR-303)
+
 ## Property Sources
 ### Inject property values
 - Property values can be 
@@ -65,6 +71,9 @@ app.name=MyApp app.description=${app.name} is a Spring Boot application
 - The `EnvironmentPostProcessor` interface allows you to manipulate the `Environment` before the application starts.
 - [Spring Boot-CustomizeEnvironment-Before-AppContext](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-customize-the-environment-or-application-context)
 
+## Actuator Check
+- if actuator is enabled then the properties can be checked at `localhost:8080/configprops`
+
 ## Type Safe Configuration Properties
 - using `@Value("{property}"` can be cumbersome if working with multiple properties or data is hierarchical in nature
 - strongly typed beans can be used to govern and validate the configuration
@@ -93,3 +102,119 @@ acme.security.username="someuser"   # nested value
 - Add setters for the above POJO
 
 ### Constructor property binding
+- Above example using constructor binding and making it ***immutable***
+- the binder will expect to find a constructor with the parameters that you wish to have bound.
+- Nested members of a `@ConstructorBinding` class (such as `Security` in the example) will also be bound via their constructor.
+- NOTE : If you have more than one constructor for your class you can also use `@ConstructorBinding` directly on the constructor that should be bound.
+```java
+@ConstructorBinding 
+@ConfigurationProperties("acme") 
+public class AcmeProperties { 
+	private final boolean enabled;
+	...
+	public AcmeProperties(boolean enabled, 
+	InetAddress remoteAddress, 
+	Security security,
+	@DefaultValue("USER") List<String> roles) { 
+		this.enabled = enabled; 
+		this.remoteAddress = remoteAddress; 
+		this.security = security; 
+		this.roles = roles
+	}
+	public static class Security {
+		public Security(String username) {
+			this.username = username;	
+		}
+	}
+}
+```
+> To use constructor binding the class must be enabled using `@EnableConfigurationProperties` or configuration property scanning.
+
+### Enabling `@ConfigurationProperties`-annotated types
+- Sometimes, classes annotated with `@ConfigurationProperties` might not be suitable for scanning, for example, if you’re developing your own auto-configuration or you want to enable them conditionally. In these cases, specify the list of types to process using the `@EnableConfigurationProperties` annotation
+```java
+@Configuration(proxyBeanMethods = false) @EnableConfigurationProperties(AcmeProperties.class) public class MyConfiguration { }
+```
+
+NOTE : `proxyBeanMethods` 
+- Specify whether `@Bean` methods should get proxied in order to enforce bean lifecycle behavior, e.g. to return shared singleton bean instances even in case of direct `@Bean` method calls in user code. This feature requires method interception, implemented through a runtime-generated CGLIB subclass which comes with limitations such as the configuration class and its methods not being allowed to declare `final`.
+- The default is `true`, allowing for 'inter-bean references' via direct method calls within the configuration class as well as for external calls to this configuration's `@Bean` methods, e.g. from another configuration class. If this is not needed since each of this particular configuration's `@Bean` methods is self-contained and designed as a plain factory method for container use, switch this flag to `false` in order to avoid CGLIB subclass processing.
+- Turning off bean method interception effectively processes `@Bean` methods individually like when declared on non-`@Configuration` classes, a.k.a. "@Bean Lite Mode
+
+### Using `@ConfigurationProperties`
+- Using in service
+```java
+@Service 
+public class MyService { 
+	private final AcmeProperties properties; 
+	public MyService(AcmeProperties properties) { 
+		this.properties = properties; 
+	}
+	..
+}
+```
+- Using `@ConfigurationProperties` also lets you generate metadata files that can be used by IDEs to offer auto-completion for your own keys. [Spring-Boot-Configuration-Properties-IDE](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#configuration-metadata)
+
+## Relaxed Binding
+- uses relaxed rules for binding `Environment` properties to `@ConfigurationProperties`
+```java
+@ConfigurationProperties(prefix="acme.my-project.person") 
+public class OwnerProperties { 
+	private String firstName;
+	...
+}
+```
+|Property|Details|
+|-------|------|
+|`acme.my-project.person.first-name`|kebab case (recommended in `.properties` & `.yml`)|
+| `acme.myProject.person.firstName`| Standard camel case|
+|`acme.my_project.person.first_name`| underscore notation (also used in `.properties` & `.yml`)|
+|`ACME_MYPROJECT_PERSON_FIRSTNAME`|Upper case format, which is recommended when using system environment variables.|
+
+### Binding Maps
+- [Spring-Boot-Property-Binding-Maps](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-relaxed-binding-maps)
+- The properties above will bind to a `Map` with `/key1`, `/key2` and `key3` as the keys in the map. The slash has been removed from `key3` because it wasn’t surrounded by square brackets.
+```properties
+acme.map.[/key1]=value1 
+acme.map.[/key2]=value2 
+acme.map./key3=value3
+```
+
+### Binding from Environment Variables
+- To convert a property name in the canonical-form to an environment variable name you can follow these rules
+	- Replace dots (`.`) with underscores (`_`).
+	- Remove any dashes (`-`).
+	- Convert to uppercase.
+- For example, the configuration property `spring.main.log-startup-info` would be an environment variable named `SPRING_MAIN_LOGSTARTUPINFO`.
+- Binding Lists :
+	- Environment variables can also be used when binding to object lists. To bind to a `List`, the element number should be surrounded with underscores in the variable name.
+	- For example, the configuration property `my.acme[0].other` would use an environment variable named `MY_ACME_0_OTHER`.
+
+## Merging Complex Types
+- When lists are configured in more than one place, overriding works by replacing the entire list.
+- For `Map` properties, you can bind with property values drawn from multiple sources. However, for the same property in multiple sources, the one with the highest priority is used.
+- More details : [Spring-Boot-Merging-Complex-Types](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-complex-type-merge)
+
+## Properties Conversion
+- Spring Boot attempts to coerce the external application properties to the right type when it binds to the `@ConfigurationProperties` beans.
+- If you need custom type conversion, you can provide 
+	- a `ConversionService` bean (with a bean named `conversionService`) or 
+	- custom property editors (through a `CustomEditorConfigurer` bean) or 
+	- custom `Converters` (with bean definitions annotated as `@ConfigurationPropertiesBinding`).
+- NOTE : bean requested early during application life-cycle, so limit dependencies
+
+### Converting Duration
+- Spring Boot has dedicated support for expressing durations (`java.time.Duration`)
+	- -   A regular `long` representation (using milliseconds as the default unit unless a `@DurationUnit` has been specified)
+	- The standard ISO-8601 format [used by `java.time.Duration`]
+	- A more readable format where the value and the unit are coupled (e.g. `10s` means 10 seconds)
+```java
+@ConfigurationProperties("app.system") 
+public class AppSystemProperties { 
+	@DurationUnit(ChronoUnit.SECONDS) 
+	private Duration sessionTimeout = Duration.ofSeconds(30); 
+	
+	private Duration readTimeout = Duration.ofMillis(1000);
+	...
+}
+```
