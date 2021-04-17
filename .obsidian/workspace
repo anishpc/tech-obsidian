@@ -10,8 +10,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "spring-boot/Spring Externalized Configuration.md",
-            "mode": "source"
+            "file": "spring-boot/Spring Boot Testing.md",
+            "mode": "preview"
           }
         },
         "group": "734c76aa95e79560"
@@ -27,7 +27,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-boot/Spring Externalized Configuration.md"
+                "file": "spring-boot/Spring Boot Testing.md"
               }
             },
             "group": "734c76aa95e79560"
@@ -38,7 +38,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-boot/Spring Externalized Configuration.md",
+                "file": "spring-boot/Spring Boot Testing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -107,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "spring-boot/Spring Externalized Configuration.md",
+                "file": "spring-boot/Spring Boot Testing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +124,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "spring-boot/Spring Externalized Configuration.md"
+                "file": "spring-boot/Spring Boot Testing.md"
               }
             }
           }
@@ -137,15 +137,15 @@
   },
   "active": "44166f54a6e52c1f",
   "lastOpenFiles": [
-    "spring-boot/Spring Externalized Configuration.md",
+    "Spring Boot Testing.md",
     "spring-boot/01 Spring Boot Main.md",
+    "spring-boot/Spring Externalized Configuration.md",
+    "spring-boot/Spring Profiles.md",
+    "Spring Profiles.md",
     "Spring Property Configuration.md",
     "java/java-concurrency/Thread Pools & Executors.md",
     "java/java-concurrency/Producer Consumer.md",
     "java/java-concurrency/01_Java Concurrency Main.md",
-    "java/java-concurrency/Thread life cycle states.md",
-    "Thread life cycle states.md",
-    "Untitled.md",
-    "spring-boot/boot-auto-configuration/Spring Boot Custom Conditions.md"
+    "java/java-concurrency/Thread life cycle states.md"
   ]
 }

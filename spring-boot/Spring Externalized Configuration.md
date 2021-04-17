@@ -55,8 +55,13 @@ java -jar myapp.jar --spring.application.json='{"acme":{"name":"test"}}'
 [Spring-Boot-ExternalConfigFiles-Wildcard](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-files-wildcards)
 
 ### Profile specific files
-- For example, if your application activates a profile named `prod` and uses YAML files, then both `application.yml` and `application-prod.yml` will be considered.
-- Profile-specific properties are loaded from the same locations as standard `application.properties`, with profile-specific files always overriding the non-specific ones. If several profiles are specified, a last-wins strategy applies.
+- Which files are loaded
+	- For example, if your application activates a profile named `prod` and uses YAML files, then both `application.yml` and `application-prod.yml` will be considered.
+- Last-wins in case of multiple profiles
+	- if profiles `prod,live` are specified by the `spring.profiles.active` property, values in `application-prod.properties` can be overridden by those in `application-live.properties`.
+- Default only if NO active profile
+	- If no profile is explicitly activated then `application-default` is considered. Note: `application-default` is NOT considered if any profile is active.
+
 ### Importing additional data
 [Spring-Boot-ExternalConfigFiles-Importing](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-files-importing)
 
