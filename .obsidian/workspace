@@ -11,7 +11,7 @@
           "type": "markdown",
           "state": {
             "file": "spring-boot/Spring Boot Testing.md",
-            "mode": "preview"
+            "mode": "source"
           }
         },
         "group": "734c76aa95e79560"
@@ -137,6 +137,7 @@
   },
   "active": "44166f54a6e52c1f",
   "lastOpenFiles": [
+    "spring-boot/Spring Boot Testing.md",
     "Spring Boot Testing.md",
     "spring-boot/01 Spring Boot Main.md",
     "spring-boot/Spring Externalized Configuration.md",
@@ -145,7 +146,6 @@
     "Spring Property Configuration.md",
     "java/java-concurrency/Thread Pools & Executors.md",
     "java/java-concurrency/Producer Consumer.md",
-    "java/java-concurrency/01_Java Concurrency Main.md",
-    "java/java-concurrency/Thread life cycle states.md"
+    "java/java-concurrency/01_Java Concurrency Main.md"
   ]
 }

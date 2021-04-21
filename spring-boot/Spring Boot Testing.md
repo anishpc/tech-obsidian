@@ -1,6 +1,27 @@
 
 ## Scratch
 - Use `spring-boot-starter-test` "Starter", which imports both Spring Boot test module as well as JUnit Jupiter, AssertJ, Hamcrest, and other libraries
+- `@RunWith(SpringRunner.class)` for JUnit & `@SpringBootTest` annotation for Springs context
+- By default, will find `@SpringBootConfiguration`. To override, use (1) nested configuration or (2) use classes attribute. To add rather than replace, use `@TestConfiguration`
+- Use `webEnvironment` attribute to 
+	- run a mock servlet environment
+	- start a real server on a defined port
+	- start a real server on a random port (use `TestRestTemplate` or `@LocalServerPort`)
+- For environment properties, you can use the properties or value attribute, or 
+	- you can use the `@TestPropertySource` annotation.`
+- Mock Beans
+	- replaces or adds a mock bean to the Application Context
+	- Takes care of 
+		- reseting the mock (no need for `@DirtiesContext`)
+		- context cache issues
+		- AOP Issues
+	- `@SpyBean` is also available which does not replace/add beans but can spy on existing beans
+- Testing application "slices"
+	- test common slices
+		- JSON
+		- Data JPA
+		- Rest Client
+		- Spring MVC
 
 ## Testing Spring Applications
 - integration testing can be done with `ApplicationContext`
