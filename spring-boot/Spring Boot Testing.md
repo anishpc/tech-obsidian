@@ -22,9 +22,142 @@
 		- Data JPA
 		- Rest Client
 		- Spring MVC
+- Annotations affecting : 
+	- `@SpringBootTest`
+	- `@ActiveProfiles`
+	- `@TestPropertySource`
+	- `@Import`
+	- `@ContextConfiguration`
 
-## Testing Spring Applications
+### Testing Spring Applications
 - integration testing can be done with `ApplicationContext`
+
+## Scratch : Pro Spring Boot 2
+1. Primary goals of Spring Framework in integration testing are : 
+	- managing the Spring IoC container caching between test execution
+	- transaction management
+	- dependency injection of test fixture instances
+	- Spring-specific base classes
+2. Spring Framework provides way to integrate `ApplicationContext` in tests via : 
+	- `BootstrapWith` : a class-level annotation to configure how the Spring `TestContext` framework is bootstrapped
+	- `@ContextConfiguration` : defines class-level metadata to determine how to load and configure an `ApplicationContext` for integration tests. `ApplicationContext` loads all bean definitions from there
+	- `@WebAppConfiguration` : class-level annotation to declare that the `ApplicationContext` which loads for an integration test should be a `WebApplicationContext`
+	- `@ActiveProfile` : class-level annotation to declare which bean definition profile(s) should be active when loading an `ApplicationContext` for an integration test
+	- `@TestPropertySource` : class-level annotation to configure the locations of properties files and inline properties to be added to the set of `PropertySources` in the `Environment` for an `ApplicationContext` loaded for the test
+	- `@DirtiesContext` : indicates that the underlying `ApplicationContext` has been dirtied during the execution of a test and should be closed
+	- miscellaneous : `@TestExecutionListeners`, `@Commit`, `@Rollback`, `@Timed`, `@Repeat`, `@IfProfileValue`, etc.
+3. Dependencies with `spring-boot-starter-test` : 
+	- JUnit, AssertJ, Hamcrest, Mockito, JSONAssert, JsonPath
+4. Annotations for running tests : `@RunWith(SpringRunner.class)` & `@SpringBootTest`
+5. Testing web endpoints : 
+	- use `@AutoConfigureMockMvc` on test class in addition to above 2 annotations; this also configures `MockMvc` which can be autowired in the test class
+	- can also autowire `TestRestTemplate` in the test class
+6. Mocking beans : 
+	- using `@MockBean`, you can mock a new Spring bean or replace an existing definition
+7. Testing Slices : 
+	- `@JsonTest` : auto-configures JSON mapper (jackson, Gson, Jsonb)
+	- `@WebMvcTest` : 
+		- testing for controllers
+		- limits scanning to `@Controller`, `@ControllerAdvice`, `@JsonComponent`, `Converter`, `GenericConverter`, `Filter`, `WebMvcConfigurer`, `HandlerMethodArgumentResolver`
+		- beans marked with `@Component` are NOT scanned with this annotation, but you can still use `@MockBean` if needed
+	- `@WebFluxTest` : 
+		- similar to above
+		- provides `WebTestClient` which can be auto-wired in test class
+	- `@DataJpaTest`
+		- provides `TestEntityManager` which can be auto-wired in test class
+		- by default uses in-memory database engines (H2, Derby, HSQL); for real database testing, add `@AutoConfigureTestDatabase(replace=NONE)` on the test class along with `@DataJpaTest`
+	- `@JdbcTest`
+		- much similar to `@DataJpaTest` but for pure JDBC-related tests
+		- provides `JdbcTemplate` for autowiring in test class
+		- omits classes with `@Component`
+	- `@RestClientTest(MyService.class)`
+		- auto-configures Jackson, GSON, JSONB support
+		- configures `RestTemplateBuilder` and support for `MockRestServiceServer`
+
+### Context Caching
+
+## Scratch : LiveLessons
+1. `@TestPropertySource`
+2. `@RunWith(SpringRunner.class)`
+3. `@SpringBootTest(webEnvironment = ...)` -- below
+	- this searches in the package upwards to find `@SpringBootApplication` class
+	- also gets `TestRestTemplate` auto-configured to invoke this application
+4. `@MockBean`
+	- replaces or adds a mock bean to the ApplicationContext
+	- takes care of
+		- resetting the mock ( no need for `@DirtiesContext`)
+		- Context cache issues
+		- AOP issues
+	- `@SpyBean` is also available
+5. `@JsonTest`
+	- marked on the test class
+	- provides `JacksonTester<...>` (also support for `GsonTester`) to be autowired
+	- We can test both serialize & deserialize testing with `JacksonTester` with `jacksonTester.write(object)` and `jacksonTester.parseObject(str)`. AssertJ has convenient methods to test equality with json files or to test a specific value with jsonpath.
+6. `@DataJpaTest`
+	- test domain logic and JPA mapping
+	- auto-configures Hibernate, Spring Data and DB
+	- uses in-memory DB by default
+	- provides `TestEntityManager` bean to be autowired
+7. `@RestClientTest` -- testing class which calls remote endpoint
+	- the `@RestClientTest` annotation would specify the service class to be tested and also the properties POJO as `@RestClientTest({MyService.class, MyPropPojo.class})`
+		- also can use the `@TestPropertySource` annotation on the class to replace the remote endpoint URL
+		- use to test `RestTemplate` calls (should be via `RestTemplateBuilder`) 
+		- `restTemplate` in the service class is not autowired but created using the `RestTemplateBuilder` which is autowired.
+	- auto-configures `RestTemplate` beans like Jackson, HttpMessageConverters, etc
+	- provides a `MockRestServiceServer` bean to be autowired
+		- mocks out remote rest calls
+		```java
+		mockRestSvcServer.expect(requestTo("http://remote-endpoint/mypath")).andRespond(withSuccess(getClassPathResource("success_response.json"), APPLICATION_JSON))
+		```
+8. `@WebMvcTest`
+	- used to test Spring MVC mappings (controllers)
+		- we can choose a specific controller `@WebMvcTest(MyController.class)` or all controllers
+		- service classes could be mocked out using `MockBean`
+	- auto-configures web components
+	- provides `MockMvc` to be autowired to invoke the application controller
+	- optionally will work with HTMLUnit or Selenium
+9. Slice Annotations : 
+	- slice annotations are composed as follows 
+		- usually `@OverrideAutoConfiguration`
+			- disables full auto-configuration
+			- allows tests to selectively import parts of configuration that is needed
+			- reason : for slice annotation, not all beans are required, hence 
+		- some `@TypeExcludeFilters`
+			- filter beans that are included via component scanning
+			- works with `@TypeExcludeFilter`
+			- important as `@SpringBootApplication` is used
+		- one or more `@AutoConfigure` annotations
+			- specific auto-configuration imports (like for using `MockMvc` beans)
+			- meta-annotated with `@ImportAutoConfiguration`
+			- load configuration classes via `spring.factories`
+		- possibly a `@PropertyMapping("my.prop.name")` annotation
+			- means that all fields in that class on which this annotation is placed would have the `my.prop.name` prefix
+			- often used on `@AutoConfigure` annotations
+			- map annotation attributes to `Environment` properties
+			- allows test configuration classes to use `@Conditions`
+			- all fields
+	- Example `@JsonTest` annotation
+		![jsontest_annotation.png](jsontest_annotation.png)
+		- Top 4 are standard Java annotation
+		- `@BootstrapWith` -- helps bootstrap the way the context is loaded; equivalent of `SpringBootTest`
+		- `OverrideAutoConfiguration(enabled=false)` -- not to apply the regular auto-configuration it usually would
+		- `TypeExcludeFilter` : want to exclude based on `JsonExcludeFilter`
+		- `@AutoConfigureCache` : to setup caching; loads the `CacheAutoConfiguration` 
+		- `@AutoConfigureJson` : `ImportAutoConfiguration` file loads the file in `spring.factories` file which are `GsonAutoConfiguration` & `JacksonAutoConfiguration`
+		- `@AutoConfigureJsonTesters` - internally has `@PropertyMapping("spring.test.jsontesters")` & also has `ImportAutoConfiguration` which reads
+	- Can override defaults for existing slice annotation
+		- `@DataJpaTest` + `@AutoConfigureTestDatabase(replace=NONE)`
+10. Using WireMock
+	- add `wiremock-standalone` dependency
+	- use JUnit `WireMockRule`
+		- can use dynamicport : `WireMockConfiguration.options().dynamicPort()`
+		- autowire the properties POJO in the test & set the URL to localhost & port to `wiremock.port()` in the `setup` method
+	- define stubs
+	- 
+	
+
+
+
 
 ## Testing Spring Boot Applications
 > External properties, logging, and other features of Spring Boot are installed in the context by default only if you use `SpringApplication` to create it
@@ -71,3 +204,4 @@ class MyTests {
     }
 }
 ```
+
