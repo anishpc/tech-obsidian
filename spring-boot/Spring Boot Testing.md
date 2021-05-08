@@ -39,13 +39,18 @@
 	- dependency injection of test fixture instances
 	- Spring-specific base classes
 2. Spring Framework provides way to integrate `ApplicationContext` in tests via : 
-	- `BootstrapWith` : a class-level annotation to configure how the Spring `TestContext` framework is bootstrapped
-	- `@ContextConfiguration` : defines class-level metadata to determine how to load and configure an `ApplicationContext` for integration tests. `ApplicationContext` loads all bean definitions from there
-	- `@WebAppConfiguration` : class-level annotation to declare that the `ApplicationContext` which loads for an integration test should be a `WebApplicationContext`
-	- `@ActiveProfile` : class-level annotation to declare which bean definition profile(s) should be active when loading an `ApplicationContext` for an integration test
-	- `@TestPropertySource` : class-level annotation to configure the locations of properties files and inline properties to be added to the set of `PropertySources` in the `Environment` for an `ApplicationContext` loaded for the test
-	- `@DirtiesContext` : indicates that the underlying `ApplicationContext` has been dirtied during the execution of a test and should be closed
-	- miscellaneous : `@TestExecutionListeners`, `@Commit`, `@Rollback`, `@Timed`, `@Repeat`, `@IfProfileValue`, etc.
+
+Annotation | Description
+|--------|-----|
+`BootstrapWith`        | class level annotation to configure how the Spring `TestContext` framework is bootstrapped
+| `ContextConfiguration` | defines class-level metadata to determine how to load and configure an `ApplicationContext` for integration tests.                                                                                           |
+| `@WebAppConfiguration` | class-level annotation to declare that the `ApplicationContext` which loads for an integration test should be a `WebApplicationContext`                                                                      |
+| `@ActiveProfile`       | class-level annotation to declare which bean definition profile(s) should be active when loading an `ApplicationContext` for an integration test |
+| `@TestPropertySource`  | class-level annotation to configure the locations of properties files and inline properties to be added to the set of `PropertySources` in the `Environment` for an `ApplicationContext` loaded for the test |
+| `@DirtiesContext`      | indicates that the underlying `ApplicationContext` has been dirtied during the execution of a test and should be closed |
+|`@TestExecutionListeners`| Class-level annotation for configuring `TestExecutionListeners` that should be registered with the `TestContextManager`|
+| miscellaneous          | `@TestExecutionListeners`, `@Commit`, `@Rollback`, `@Timed`, `@Repeat`, `@IfProfileValue`, etc.   |
+
 3. Dependencies with `spring-boot-starter-test` : 
 	- JUnit, AssertJ, Hamcrest, Mockito, JSONAssert, JsonPath
 4. Annotations for running tests : `@RunWith(SpringRunner.class)` & `@SpringBootTest`
@@ -153,9 +158,28 @@
 		- can use dynamicport : `WireMockConfiguration.options().dynamicPort()`
 		- autowire the properties POJO in the test & set the URL to localhost & port to `wiremock.port()` in the `setup` method
 	- define stubs
-	- 
 	
+## Scratch : Spring Testing Documentation
+### Goals 
+- Spring's integration test support has the following goals
+	- manage Spring IoC container caching between tests
+	- provide DI of test fixture instances
+	- provide transaction management appropriate to integration testing
+	- supply Spring-specific base classes that assist developers in writing integration tests
 
+### Context Management & Caching
+- **Loading-Caching** : Spring provides consistent loading of `ApplicationContext` & `WebApplicationContext` and caching of those contexts
+- **Why Caching** : objects instantiated by Spring container  (all Hibernate mappings, etc) can take time if not cached
+- **Context reuse** : By default, once loaded, the `ApplicationContext` is reused for each test in the test suite. "test suite" means all tests run in the same JVM (e.g. all tests run from Maven)
+- **Context corruption** : If the context is corrupted by a test then the context will be rebuild & reloaded
+### Transaction Management
+- By default, the framework creates and ***rolls back*** a transaction for each test. 
+	- if you want a transaction to commit, use the `@Commit` annotation
+- Transactional support is provided to a test by using a `PlatformTransactionManager` bean defined in the test’s application context.
+
+### Spring Testing annotations
+
+- 
 
 
 
