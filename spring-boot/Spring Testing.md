@@ -74,7 +74,7 @@ public @interface TransactionalIntegrationTest { }
 - [Bootstrapping TestContext (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-bootstrapping)
 
 ### TestExecutionListener Configuration
-- Spring provides the following `TestExecutionListener` implementations that are registered by default, exactly in the following order:
+- Spring provides the following `TestExecutionListener` implementations that are registered by default, ***exactly in the following order:***
 
 |`TestExecutionListener`|Details|
 |----|----|
@@ -96,4 +96,214 @@ public @interface TransactionalIntegrationTest { }
 - **Merging impls** : 
 	- If a custom `TestExecutionListener` is registered via `@TestExecutionListeners`, the default listeners are not registered
 	- `mergeMode` attribute of `@TestExecutionListeners` with value `MergeMode.MERGE_WITH_DEFAULTS` indicates that locally declared listeners should be merged with the default listeners.
-- 
+
+### Application Events
+- **Recording app events** : Since Spring 5.3.3, the TestContext framework supports recording application events published in the application context
+- **Usage** : To use `ApplicationEvents` in the test : 
+	1. test class to be annotated or meta-annotated with `@RecordApplicationEvents`
+	2. `ApplicationEventsTestExecutionListener` is registered (it is registered by default)
+	3. auto-wire a field of type `ApplicationEvents` 
+	4. all events published are available as streams
+```java
+@SpringJUnitConfig(/* ... */) 
+@RecordApplicationEvents      //(1)
+class OrderServiceTests {
+	@Autowired
+	ApplicationEvents events;  //(3)
+	@Test
+	void submitOrder() {
+		// business operation which generates events
+		...
+		// event verification
+		int count = events.stream(OrderSubmitted.class).count();  //(4)
+		assertThat(count).isEqualTo(1);
+	}
+}
+```
+
+### Test Execution Events
+- **Alternative to test listener** : Since Spring 5.2, there's an alternative approach to implementing custom `TestExecutionListener`
+	- **Approach** : components in the test's application context can listen to events published by `EventPublishingTestExecutionListener`. Each of these events corresponds to a method in the listener
+	- **Events** : `BeforeTestClassEvent`, `PrepareTestInstanceEvent`, etc.
+-  These events are only published if the `ApplicationContext` has already been loaded.
+-  **Benefit** : 
+	-  `TestExecutionListener` is not a bean in the `ApplicationContext`. But a test execution event can be consumed by beans and they can use DI and the app context
+-  **Usage** : 
+	1. implement `ApplicationListener`
+	2. annotate listener methods with `@EventListener`
+		- custom meta-annotations are available -- `@BeforeClass`, `@PrepareTestInstance`, etc.
+- **Exception Handling** : TBD [Exception Handling (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-test-execution-events-exception-handling)
+- **Async Listeners** : TBD [Asynchronous Listeners (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-test-execution-events-async)
+
+### Context Management
+- **What** : Each `TestContext` provides context management and caching support for the test instance
+- **App context access** : 
+	1. implement `ApplicationContextAware` to get access to app context. Spring-JUnit and Spring-TestNG implement that & hence have access to app context
+	2. can auto-wire `ApplicationContext` or `WebApplicationContext` in the test
+
+#### Context with Profiles
+- You can use the `@Profile` annotation to allocate beans to profiles. No profile means beans are available in all profiles. The `default` profile means ONLY used when no profile is active
+- Use `@ActiveProfiles` annotation to suggest that the specific profile(s) are active
+- Resolve profiles dynamically :(implement `ActiveProfilesResolver`)
+```java
+@ActiveProfiles( 
+	resolver = OperatingSystemActiveProfilesResolver.class, 
+	inheritProfiles = false)
+class MyTest {
+}
+```
+
+### Test Property Source
+#### @TestPropertySource
+- use `@TestPropertySource` on test class to declare property sources. These property sources are ***ADDED*** to the set of property sources in the `Environment`
+- Declaring
+```java
+// file source
+@ContextConfiguration 
+@TestPropertySource("/test.properties")  
+class MyIntegrationTests {}
+
+//key value 
+@ContextConfiguration 
+@TestPropertySource(properties = {"timezone = GMT", "port: 4242"})  
+class MyIntegrationTests {}
+
+```
+- Precedence
+	- test property sources have precedence over application property sources
+	- inlined test properties have precedence over file test properites (e.g. `timezone=GMT` above has higher precedence over the value declared in the file `test.properties`)
+	- `@DynamicPropertySource` (explained below) has higher precedence than `@TestPropertySource`
+- `@TestPropertySource` has attributes `inheritLocations` & `inheritProperties` which are both set to `true` by default. Also precedence rules apply. Read : [Inheriting Test Property Sources (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#inheriting-and-overriding-test-property-sources)
+
+#### Dynamic Test Property Sources
+- Since 5.2.5, dynamic properties support via `@DynamicPropertySource`
+- was originally designed to allow "Test Containers"
+- **usage** : `@TestPropertySource` is on class-level, however `@DynamicPropertySource` is on a `static` method to add key-value pairs. Values are dynamic & provided via `Supplier`
+```java
+@SpringJUnitConfig(/* ... */) 
+@Testcontainers 
+class ExampleIntegrationTests { 
+	@Container 
+	static RedisContainer redis = new RedisContainer();
+	
+	@DynamicPropertySource 
+	static void redisProperties(DynamicPropertyRegistry registry) {
+		registry.add("redis.host", redis::getContainerIpAddress);
+		registry.add("redis.port", redis::getMappedPort); 
+	}
+}
+```
+
+### Web application configuration
+[Loading a `WebApplicationContext` (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-ctx-management-web)
+
+### Context Caching
+- once the TestContext framework loads an `ApplicationContext` (or `WebApplicationContext`) for a test, the context is cached & reused for all subsequent tests with 
+	- same ***unique context config*** in the 
+	- same ***test suite***.
+- The TestContext framework uses many configuration parameters to check uniqueness and then based on that stores it in static context cache
+	- the parameters are : [Context Caching (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-ctx-management-caching)
+- **Forked process** : 
+	- context is stored in a `static` variable
+	- if tests run in separate processes then contexts cannot be cached (e.g. using `forkMode` in Maven)
+- **Size of context cache** : 
+	- default size is 32; after that LRU
+	- set new size using `spring.test.context.cache.maxSize` via JVM or Spring properties
+- **View Cache Statistics** : set `org.springframework.test.context.cache` logging to `DEBUG`
+- **Dirties Context** : if the test corrupts the context & requires reloading, annotate the class/test with `@DirtiesContext`
+
+### Context Hierarchies
+[Context Hierarchies (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-ctx-management-ctx-hierarchies)
+
+### Transaction Management
+[Transaction Management (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-tx)
+
+### Execution SQL Scripts
+[Execution SQL Scripts (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-executing-sql)
+`@Sql`
+
+### Parallel Test Execution
+- Spring 5.0 has basic support for executing tests in parallel in a single JVM
+- Guidelines by Spring team -- DO NOT run tests in parallel  :
+	- if tests use `@DirtiesContext`
+	- if tests use `@MockBean` or `@SpyBean`
+	- if tests use JUnit 4 `@FixMethodOrder`
+	- if tests change state of shared services or systems such as DB, Message broker, files, etc.
+
+### TestContext Support Classes
+#### Spring JUnit 4 Runner
+- use `@RunWith(SpringRunner.class)` or `@RunWith(SpringJUnit4ClassRunner.class)`
+#### Spring JUnit 4 Rules
+- `SpringClassRule` 
+	- is a JUnit `TestRule`
+	- supports class-level features of Spring
+- `SpringMethodRule`
+	- is a JUnit `MethodRule`
+	- supports instance-level or method-level features of Spring
+- **Differences** : 
+	- In contrast to the `SpringRunner`, Spring’s rule-based JUnit support has the advantage of being independent of any `org.junit.runner.Runner` implementation and can, therefore, be combined with existing alternative runners (such as JUnit 4’s `Parameterized`) or third-party runners (such as the `MockitoJUnitRunner`).
+- **Usage** : 
+	- To support the full functionality of the TestContext framework, you must combine a `SpringClassRule` with a `SpringMethodRule`.
+#### Spring JUnit Jupiter
+- use `@ExtendWith(SpringExtension.class)` OR
+- meta-annotation for e.g. `@SpringJUnitConfig`, `@SpringJUnitWebConfig`
+#### Nested Class Config
+- [Nested Class Config (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#testcontext-junit-jupiter-nested-test-configuration)
+
+## Spring WebTestClient
+- wraps `WebClient` to perform end-to-end tests by performing requests and verifying response
+- can be used to test MVC or WebFlux without a running server via mock server request and response object
+### Setup : Bind to Controller
+- allows to test controller(s) via mock request and response objects ***without*** running a server
+- For WebFlux, it loads infrastructure equivalent to webflux java config, registers the given controller(s) and creates a "WebHandler chain" to handle requests
+```java
+WebTestClient client = WebTestClient.bindToController(new TestController()).build();
+```
+- For Spring MVC, it delegates to `StandaloneMockMvcBuilder` to load infrastructure equivalent of WebMvc java config, registers the given controller(s) and creates an instance of `MockMvc` to handle requests
+```java
+WebTestClient client = MockMvcWebTestClient.bindToController(new TestController()).build();
+```
+### Setup : Bind to Application Context
+- For WebFlux :
+```java
+@SpringJUnitConfig(WebConfig.class)  
+class MyTests { 
+	WebTestClient client; 
+	@BeforeEach 
+	void setUp(ApplicationContext context) {  
+		client = WebTestClient.bindToApplicationContext(context).build();  
+	} 
+}
+```
+- For Spring MVC : 
+```java
+@ExtendWith(SpringExtension.class) 
+@WebAppConfiguration("classpath:META-INF/web-resources")  
+@ContextHierarchy({ @ContextConfiguration(classes = RootConfig.class), @ContextConfiguration(classes = WebConfig.class) }) 
+class MyTests { 
+	@Autowired 
+	WebApplicationContext wac;  
+	WebTestClient client; 
+	@BeforeEach 
+	void setUp() { 
+	  client = MockMvcWebTestClient.bindToApplicationContext(this.wac).build();
+	} 
+}
+```
+### Setup : Bind to Router Function
+[Router Function (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#webtestclient-fn-config)
+
+### Setup : Bind to Server
+[Bind to Server (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#webtestclient-server-config)
+
+### Client Config 
+[Client Config (spring.io)](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html#webtestclient-client-config)
+
+### Using in Tests
+```java
+client.get().uri("/persons/1")
+	.accept(MediaType.APPLICATION\_JSON)
+	.exchange()
+	.expectStatus().isOk() 	
+	.expectHeader().contentType(MediaType.APPLICATION_JSON)
+```
