@@ -6,4 +6,4 @@ Reference : [Spring Boot Reference Documentation](https://docs.spring.io/spring-
 - ### [[Spring Boot Actuator]]
 - ### [[Spring Externalized Configuration]]
 - ### [[Spring Profiles]]
-- ### [[Spring Boot Testing]]
+- ### [[Spring Boot Testing Scratch]]

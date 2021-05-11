@@ -302,8 +302,93 @@ class MyTests {
 ### Using in Tests
 ```java
 client.get().uri("/persons/1")
-	.accept(MediaType.APPLICATION\_JSON)
+	.accept(MediaType.APPLICATION_JSON)
 	.exchange()
 	.expectStatus().isOk() 	
 	.expectHeader().contentType(MediaType.APPLICATION_JSON)
 ```
+- Response Body can be decoded via
+	- `expectBody(Class<T>)` : decode to single object
+	- `expectBodyList(Class<T>)`: Decode and collect objects to `List<T>`
+	- `expectBody()`: Decode to `byte[]` for JSON Context or an empty body
+- Perform assertions as : 
+```java
+client.get().uri("/persons").exchange()
+	.expectStatus().isOk() 	
+	.expectBodyList(Person.class).hasSize(3).contains(person);
+//OR have custom assertions
+import org.springframework.test.web.reactive.server.expectBody client.get().uri("/persons/1").exchange()
+	.expectStatus().isOk()
+	.expectBody(Person.class)
+	.consumeWith(result -> { 
+		// custom assertions (e.g. AssertJ)... 
+	});
+//OR get result 
+EntityExchangeResult<Person> result = client.get().uri("/persons/1") 
+			.exchange()
+			.expectStatus().isOk() 
+			.expectBody(Person.class) 
+			.returnResult();
+//OR No Content
+client.post().uri("/persons") 
+	.body(personMono, Person.class) 
+	.exchange() 
+	.expectStatus().isCreated() 
+	.expectBody().isEmpty();
+//OR to ignore response content
+client.get().uri("/persons/123") 
+	.exchange() 
+	.expectStatus().isNotFound() 
+	.expectBody(Void.class);
+//OR to verify JSON
+client.get().uri("/persons/1") 
+	.exchange() .expectStatus().isOk() 
+	.expectBody() 
+	.json("{\"name\":\"Jane\"}")   // slashes required
+//OR using JSONPath
+client.get().uri("/persons") 
+	.exchange() 
+	.expectStatus().isOk() 
+	.expectBody() 
+	.jsonPath("$[0].name").isEqualTo("Jane") 
+	.jsonPath("$[1].name").isEqualTo("Jason");
+```
+
+#### Streaming Responses
+- To test potentially infinite streams such as `"text/event-stream"` or `"application/x-ndjson"`, start by verifying the response status and headers, and then obtain a `FluxExchangeResult`:
+```java
+FluxExchangeResult<MyEvent> result = client.get().uri("/events") 
+					.accept(TEXT_EVENT_STREAM) 
+					.exchange() 
+					.expectStatus().isOk() 
+					.returnResult(MyEvent.class);
+// Now use `StepVerifier` from `reactor-test`
+Flux<Event> eventFlux = result.getResponseBody();
+StepVerifier.create(eventFlux) 
+			.expectNext(person) 
+			.expectNextCount(4) 
+			.consumeNextWith(p -> ...) 
+			.thenCancel() 
+			.verify();
+```
+
+#### MockMvc assertions
+- to perform further assertions on the server responsem, start by obtaining an `ExchangeResult` after asserting the body
+```java
+// For a response with a body 
+EntityExchangeResult<Person> result = client.get().uri("/persons/1") 
+					.exchange() 
+					.expectStatus().isOk() 
+					.expectBody(Person.class) 
+					.returnResult(); 
+// For a response without a body 
+EntityExchangeResult<Void> result = client.get().uri("/path") 
+					.exchange() 
+					.expectBody().isEmpty();
+// MockMvc assertions
+MockMvcWebTestClient.resultActionsFor(result) 
+			.andExpect(model().attribute("integer", 3)) 
+			.andExpect(model().attribute("string", "a string value"));
+```
+
+## MockMvc
